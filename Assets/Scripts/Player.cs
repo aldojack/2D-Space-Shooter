@@ -5,21 +5,33 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _playerSpeed = 20.0f;
+    private float _playerSpeed = 3.5f;
     private float _horizontalInput;
     private float _verticalInput;
 
+    [SerializeField]
+    private GameObject _laserPrefab;
+    [SerializeField]
+    private float _laserRate = 0.5f;
+    [SerializeField]
+
+    private float _laserCooldown = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = Vector3.zero;
+        transform.position = Vector3.zero;        
     }
 
     // Update is called once per frame
     void Update()
     {
         PlayerMovement();
+
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _laserCooldown)
+        {
+            ShootLaser();
+        }
     }
 
     void PlayerMovement()
@@ -29,30 +41,26 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(_horizontalInput, _verticalInput, 0);
 
-        //Allows player to move
         transform.Translate(direction * _playerSpeed * Time.deltaTime);
 
+        //Clamps Y movement between -3.8 and 0
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
-        //Player can exit either side to wrap around
-        if (transform.position.x <= -11.30f)
+        if (transform.position.x <= -11.3f)
         {
-            transform.position = new Vector3(11.30f, transform.position.y, 0);
+            transform.position = new Vector3(11.3f, transform.position.y, 0);
         }
 
-        else if (transform.position.x >= 11.38f)
+        else if (transform.position.x >= 11.3f)
         {
-            transform.position = new Vector3(-11.31f, transform.position.y, 0);
+            transform.position = new Vector3(-11.3f, transform.position.y, 0);
         }
 
-        //Stops player leaving top or bottom of screen
-        if (transform.position.y >= 5.7f)
-        {
-            transform.position = new Vector3(transform.position.x, 5.7f, 0);
-        }
+    }
 
-        else if (transform.position.y <= -3.8f)
-        {
-            transform.position = new Vector3(transform.position.x, -3.8f, 0);
-        }
+    void ShootLaser()
+    {
+        _laserCooldown = Time.time + _laserRate;
+        Instantiate(_laserPrefab,transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
     }
 }
