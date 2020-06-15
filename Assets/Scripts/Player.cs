@@ -10,11 +10,16 @@ public class Player : MonoBehaviour
     private float _verticalInput;
     [SerializeField]
     private int _playerLives = 3;
+    [SerializeField]
+    private bool _tripleShotActive = false;
 
     private SpawnManager _spawnManager;
 
     [SerializeField]
     private GameObject _laserPrefab;
+    [SerializeField]
+    private GameObject _tripleLaserPrefab;
+
     [SerializeField]
     private float _laserRate = 0.5f;
     private float _laserCooldown = 0.0f;
@@ -70,7 +75,17 @@ public class Player : MonoBehaviour
     void ShootLaser()
     {
         _laserCooldown = Time.time + _laserRate;
-        Instantiate(_laserPrefab,transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+
+        if (_tripleShotActive == true)
+        {
+            Instantiate(_tripleLaserPrefab, transform.position, Quaternion.identity);
+
+        }
+
+        else
+            { 
+                Instantiate(_laserPrefab,transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            }
     }
 
     public void Damage()
