@@ -95,7 +95,7 @@ public class Player : MonoBehaviour
         if (_playerLives <=0)
         {
             _spawnManager.OnPlayerDeath();
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 
