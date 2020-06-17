@@ -6,7 +6,7 @@ MonoImporter:
   defaultReferences:
   - _laserPrefab: {fileID: 6239832660469489515, guid: a49fc3c5d3975fa41a8598b4f57df36a,
       type: 3}
-  - _tripleLaserPrefab: {fileID: 131911207341596135, guid: bd6ad4036584b1147b641c260c254327,
+  - _tripleLaserPrefab: {fileID: 2260509446333749220, guid: bd6ad4036584b1147b641c260c254327,
       type: 3}
   executionOrder: 0
   icon: {instanceID: 0}

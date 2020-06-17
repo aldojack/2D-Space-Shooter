@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    //Player
     [SerializeField]
     private float _playerSpeed = 3.5f;
+    [SerializeField]
+    private float _speedMultiplyer = 2;
     private float _horizontalInput;
     private float _verticalInput;
     [SerializeField]
     private int _playerLives = 3;
-    [SerializeField]
-    private bool _tripleShotActive = false;
 
-    private SpawnManager _spawnManager;
+    //Laser
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -21,8 +22,19 @@ public class Player : MonoBehaviour
     private GameObject _tripleLaserPrefab;
 
     [SerializeField]
+    private bool _tripleShotActive = false;
+
+    [SerializeField]
+    private bool _speedBoostActive = false;
+
+    [SerializeField]
     private float _laserRate = 0.5f;
     private float _laserCooldown = 0.0f;
+
+    //Other
+    private SpawnManager _spawnManager;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -55,9 +67,8 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(_horizontalInput, _verticalInput, 0);
 
-        transform.Translate(direction * _playerSpeed * Time.deltaTime);
+            transform.Translate(direction * _playerSpeed * Time.deltaTime);
 
-        //Clamps Y movement between -3.8 and 0
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
         if (transform.position.x <= -11.3f)
@@ -79,7 +90,6 @@ public class Player : MonoBehaviour
         if (_tripleShotActive == true)
         {
             Instantiate(_tripleLaserPrefab, transform.position, Quaternion.identity);
-
         }
 
         else
@@ -90,18 +100,17 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        _playerLives--;
+            _playerLives--;   
 
-        if (_playerLives <=0)
+        if (_playerLives == 0) 
         {
             _spawnManager.OnPlayerDeath();
-            Destroy(transform.parent.gameObject);
+            Destroy(gameObject);
         }
     }
 
     public void TripleShotActive()
     {
-
         _tripleShotActive = true;
         StartCoroutine(TripleShotCooldown());
     }
@@ -110,6 +119,20 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         _tripleShotActive = false;
+    }
+
+    public void SpeedBoostActive()
+    {
+        _speedBoostActive = true;
+        _playerSpeed *= _speedMultiplyer;
+        StartCoroutine(SpeedCooldown());
+    }
+
+    IEnumerator SpeedCooldown()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _playerSpeed /= _speedMultiplyer;
+        _speedBoostActive = false;
     }
 
 }
