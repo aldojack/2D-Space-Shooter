@@ -32,7 +32,7 @@ public class PowerUp : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.tag =="Player")
+        if (other.CompareTag ("Player"))
         {
             Player player = other.transform.GetComponent<Player>();
 
@@ -48,7 +48,7 @@ public class PowerUp : MonoBehaviour
                         player.SpeedBoostActive();
                         break;
                     case 2:
-                        Debug.Log("Shield power up collected");
+                        player.ShieldActive();
                         break;
                     default:
                         Debug.Log("Default value");

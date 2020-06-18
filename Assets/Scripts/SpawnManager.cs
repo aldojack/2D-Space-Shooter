@@ -57,5 +57,10 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            Destroy(obj);
+        }
+
     }
 }
