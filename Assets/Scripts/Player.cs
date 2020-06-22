@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -35,7 +38,9 @@ public class Player : MonoBehaviour
     //Other
     private SpawnManager _spawnManager;
     private UiManager _uiManager;
+    private Reload_Scene _sceneManager;
 
+    [SerializeField]
     private int _score = 0;
 
 
@@ -46,6 +51,9 @@ public class Player : MonoBehaviour
         transform.position = Vector3.zero;
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();
+        _sceneManager = GameObject.Find("SceneManager").GetComponent<Reload_Scene>();
+
+
 
         if (_uiManager == null)
         {
@@ -56,17 +64,27 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Spawn Manager is NULL. ");
         }
+
+        if (_sceneManager == null)
+        {
+            Debug.LogError("Scene Manager is NULL. ");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         PlayerMovement();
-
+        
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _laserCooldown)
         {
             ShootLaser();
         }
+
+        //if (Input.GetKeyDown(KeyCode.R) && _playerLives == 0)
+        //{
+        //    _sceneManager.RestartLevel();
+        //}
 
     }
 
@@ -110,17 +128,20 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+
         if (_shieldActive == true)
         {
             _shieldActive = false;
             _playerShield.SetActive(false);
             return;
         }
-            _playerLives--;   
+        _playerLives--;
+        _uiManager.UpdateLives(_playerLives);
 
         if (_playerLives == 0) 
         {
             _spawnManager.OnPlayerDeath();
+            _sceneManager.RestartLevel(true);
             Destroy(gameObject);
         }
     }
@@ -162,4 +183,5 @@ public class Player : MonoBehaviour
         _score += 10;
         _uiManager.UpdateScore(_score);
     }
+
 }
