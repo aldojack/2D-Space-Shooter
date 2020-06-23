@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     //Other
     private SpawnManager _spawnManager;
     private UiManager _uiManager;
-    private Reload_Scene _sceneManager;
+    private GameManager _sceneManager;
 
     [SerializeField]
     private int _score = 0;
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         transform.position = Vector3.zero;
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();
-        _sceneManager = GameObject.Find("SceneManager").GetComponent<Reload_Scene>();
+        _sceneManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
 
 
@@ -80,11 +80,6 @@ public class Player : MonoBehaviour
         {
             ShootLaser();
         }
-
-        //if (Input.GetKeyDown(KeyCode.R) && _playerLives == 0)
-        //{
-        //    _sceneManager.RestartLevel();
-        //}
 
     }
 
@@ -141,7 +136,7 @@ public class Player : MonoBehaviour
         if (_playerLives == 0) 
         {
             _spawnManager.OnPlayerDeath();
-            _sceneManager.RestartLevel(true);
+            _sceneManager.GameOver();
             Destroy(gameObject);
         }
     }

@@ -35,14 +35,19 @@ public class UiManager : MonoBehaviour
 
     public void UpdateLives (int currentLives)
     {
-
         _LivesImg.sprite = _livesSprite[currentLives];
+
         if (currentLives == 0)
         {
-            _gameOver.gameObject.SetActive(true);
-            _restart.gameObject.SetActive(true);
-            StartCoroutine(TextFlicker());
+            GameOverSequence();
         }
+    }
+
+    void GameOverSequence()
+    {
+        _gameOver.gameObject.SetActive(true);
+        _restart.gameObject.SetActive(true);
+        StartCoroutine(TextFlicker());
     }
 
     IEnumerator TextFlicker()
