@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Enemy : MonoBehaviour
 {
@@ -8,11 +9,27 @@ public class Enemy : MonoBehaviour
     private float enemySpeed = 4f;
 
     private Player _player;
+    [SerializeField]
+
+    private Animator _anim; 
 
     // Start is called before the first frame update
     void Start()
     {
             _player =  GameObject.Find("Player").GetComponent<Player>();
+
+        if (_player == null)
+        {
+            Debug.LogError("Player is NULL");
+        }
+
+        _anim = GetComponent<Animator>();
+         
+        if (_anim == null)
+        {
+            Debug.LogError("Animator is NULL");
+
+        }
 
     }
 
@@ -40,23 +57,31 @@ public class Enemy : MonoBehaviour
         {
             Player player = other.transform.GetComponent<Player>();
 
-            Destroy(gameObject);
+
             if (player != null)
             {
                 player.Damage();
             }
 
-
+            _anim.SetTrigger("OnEnemyDeath");
+            enemySpeed = 0;
+            Destroy(gameObject,2.30f);
         }
 
         if (other.tag == "Laser")
         {
+            Destroy(other.gameObject);
+
             if (_player != null)
             {
                 _player.AddScore();
             }
-            Destroy(gameObject);
-            Destroy(other.gameObject);
+            
+            _anim.SetTrigger("OnEnemyDeath");
+            enemySpeed = 0;
+            Destroy(gameObject, 2.30f);
+
         }
     }
+
 }

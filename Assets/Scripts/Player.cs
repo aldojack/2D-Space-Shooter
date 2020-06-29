@@ -17,6 +17,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _playerLives = 3;
 
+    //[SerializeField]
+    //private GameObject _leftEngine;
+    //[SerializeField]
+    //private GameObject _rightEngine;
+    [SerializeField]
+    private GameObject[] _playerEngine = new GameObject[2];
+
+
+
     //Laser
 
     [SerializeField]
@@ -40,6 +49,12 @@ public class Player : MonoBehaviour
     private UiManager _uiManager;
     private GameManager _sceneManager;
 
+
+    [SerializeField]
+    private AudioClip _laserSound;
+    [SerializeField]
+    private AudioSource _audioSource;
+
     [SerializeField]
     private int _score = 0;
 
@@ -53,7 +68,7 @@ public class Player : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();
         _sceneManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
-
+        _audioSource = GetComponent<AudioSource>();
 
         if (_uiManager == null)
         {
@@ -68,6 +83,15 @@ public class Player : MonoBehaviour
         if (_sceneManager == null)
         {
             Debug.LogError("Scene Manager is NULL. ");
+        }
+
+        if (_audioSource == null)
+        {
+            Debug.LogError("Audio Source on player is NULL. ");
+        }
+        else
+        {
+            _audioSource.clip = _laserSound;
         }
     }
 
@@ -119,6 +143,8 @@ public class Player : MonoBehaviour
             { 
                 Instantiate(_laserPrefab,transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
             }
+
+        _audioSource.Play();
     }
 
     public void Damage()
@@ -131,6 +157,27 @@ public class Player : MonoBehaviour
             return;
         }
         _playerLives--;
+
+        int randomEngine = Random.Range(0, 2);
+
+        if (_playerLives == 2)
+        {
+            _playerEngine[randomEngine].SetActive(true);
+        }
+        
+        else if (_playerLives == 1)
+        {
+            if(_playerEngine[0].activeSelf == true)
+            {
+                _playerEngine[1].SetActive(true);
+            }
+
+            else
+            {
+                _playerEngine[0].SetActive(true);
+            }
+        }
+
         _uiManager.UpdateLives(_playerLives);
 
         if (_playerLives == 0) 
