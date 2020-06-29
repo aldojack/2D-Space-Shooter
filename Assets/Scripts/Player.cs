@@ -17,10 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _playerLives = 3;
 
-    //[SerializeField]
-    //private GameObject _leftEngine;
-    //[SerializeField]
-    //private GameObject _rightEngine;
+
     [SerializeField]
     private GameObject[] _playerEngine = new GameObject[2];
 
@@ -35,6 +32,7 @@ public class Player : MonoBehaviour
 
     private bool _tripleShotActive = false;
     private bool _speedBoostActive = false;
+    [SerializeField]
     private bool _shieldActive = false;
 
     [SerializeField]
@@ -52,6 +50,9 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private AudioClip _laserSound;
+    [SerializeField]
+    private AudioClip _explosionSound;
+
     [SerializeField]
     private AudioSource _audioSource;
 
@@ -180,12 +181,12 @@ public class Player : MonoBehaviour
 
         _uiManager.UpdateLives(_playerLives);
 
-        if (_playerLives == 0) 
+        if (_playerLives == 0)
         {
+
             _spawnManager.OnPlayerDeath();
             _sceneManager.GameOver();
-            //Play explosion sound
-            Destroy(gameObject);
+            Destroy(gameObject,2.3f);
         }
     }
 
