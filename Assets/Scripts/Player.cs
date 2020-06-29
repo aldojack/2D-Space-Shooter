@@ -184,6 +184,7 @@ public class Player : MonoBehaviour
         {
             _spawnManager.OnPlayerDeath();
             _sceneManager.GameOver();
+            //Play explosion sound
             Destroy(gameObject);
         }
     }

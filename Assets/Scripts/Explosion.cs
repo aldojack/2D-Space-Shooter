@@ -5,8 +5,9 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
 
-    private void OnEnable()
+    private void Update()
     {
+
         Destroy(gameObject,2.39f);
     }
 }

@@ -11,12 +11,14 @@ public class Enemy : MonoBehaviour
     private Player _player;
     [SerializeField]
 
-    private Animator _anim; 
+    private Animator _anim;
+    private AudioSource _explosionSound;
 
     // Start is called before the first frame update
     void Start()
     {
-            _player =  GameObject.Find("Player").GetComponent<Player>();
+        _player =  GameObject.Find("Player").GetComponent<Player>();
+        _explosionSound = GameObject.Find("Explosion").GetComponent<AudioSource>();
 
         if (_player == null)
         {
@@ -60,6 +62,8 @@ public class Enemy : MonoBehaviour
 
             if (player != null)
             {
+                //Play explosion sound
+                _explosionSound.Play();
                 player.Damage();
             }
 
@@ -76,7 +80,9 @@ public class Enemy : MonoBehaviour
             {
                 _player.AddScore();
             }
-            
+
+            //Play explosion sound
+            _explosionSound.Play();
             _anim.SetTrigger("OnEnemyDeath");
             enemySpeed = 0;
             Destroy(gameObject, 2.30f);
