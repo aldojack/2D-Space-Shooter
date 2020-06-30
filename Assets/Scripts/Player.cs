@@ -50,8 +50,6 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private AudioClip _laserSound;
-    [SerializeField]
-    private AudioClip _explosionSound;
 
     [SerializeField]
     private AudioSource _audioSource;
